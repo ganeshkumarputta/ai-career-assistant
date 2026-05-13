@@ -1,3 +1,7 @@
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from pydantic import BaseModel
 
 from company_questions import generate_company_questions
