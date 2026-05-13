@@ -128,7 +128,7 @@ function MockInterview() {
     try {
 
       const response = await fetch(
-        "http://localhost:8000/generate_interview_questions",
+        "https://ai-career-assistant.onrender.com/generate_interview_questions",
         {
           method: "POST",
 

@@ -48,7 +48,7 @@ function ResumeUpload() {
       formData.append("jd", jd);
 
       const res = await fetch(
-        "http://localhost:8000/analyze_resume",
+        "https://ai-career-assistant.onrender.com/analyze_resume",
         {
           method: "POST",
           body: formData,
