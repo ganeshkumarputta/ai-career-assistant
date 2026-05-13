@@ -8,7 +8,7 @@ function SpeechInput() {
     const formData = new FormData();
     formData.append("text", text);
 
-    const res = await fetch("https://ai-career-assistant.onrender.com/analyze_speech", {
+    const res = await fetch("https://ai-career-assistant-f1ca.onrender.com/analyze_speech", {
       method: "POST",
       body: formData,
     });
