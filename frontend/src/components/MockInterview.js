@@ -160,63 +160,87 @@ function MockInterview() {
     }
   };
 
-  const startListening = () => {
+  const startListening = async () => {
 
     if (listening) return;
 
-    const SpeechRecognition =
-      window.SpeechRecognition ||
-      window.webkitSpeechRecognition;
+    try {
 
-    const recognition =
-      new SpeechRecognition();
+      await navigator.mediaDevices.getUserMedia({
+        audio: true
+      });
 
-    recognitionRef.current = recognition;
+      const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
 
-    recognition.continuous = true;
+      if (!SpeechRecognition) {
 
-    recognition.interimResults = true;
+        alert(
+          "Speech Recognition is not supported on this device."
+        );
 
-    recognition.lang = "en-US";
-
-    let finalTranscript = "";
-
-    recognition.start();
-
-    setListening(true);
-
-    recognition.onresult = (event) => {
-
-      let transcript = "";
-
-      for (
-        let i = event.resultIndex;
-        i < event.results.length;
-        i++
-      ) {
-
-        transcript +=
-          event.results[i][0].transcript + " ";
+        return;
       }
 
-      finalTranscript = transcript;
+      const recognition =
+        new SpeechRecognition();
 
-      setAnswer(finalTranscript);
-    };
+      recognitionRef.current = recognition;
 
-    recognition.onerror = (event) => {
+      recognition.continuous = true;
 
-      console.error(event);
+      recognition.interimResults = true;
 
-      setListening(false);
-    };
+      recognition.lang = "en-US";
 
-    recognition.onend = () => {
+      let finalTranscript = "";
 
-      setListening(false);
+      recognition.start();
 
-      analyzeAnswer(finalTranscript);
-    };
+      setListening(true);
+
+      recognition.onresult = (event) => {
+
+        let transcript = "";
+
+        for (
+          let i = event.resultIndex;
+          i < event.results.length;
+          i++
+        ) {
+
+          transcript +=
+            event.results[i][0].transcript + " ";
+        }
+
+        finalTranscript = transcript;
+
+        setAnswer(finalTranscript);
+      };
+
+      recognition.onerror = (event) => {
+
+        console.error(event);
+
+        alert("Microphone error occurred.");
+
+        setListening(false);
+      };
+
+      recognition.onend = () => {
+
+        setListening(false);
+
+        analyzeAnswer(finalTranscript);
+      };
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert("Please allow microphone permission.");
+    }
   };
 
   const stopListening = () => {
